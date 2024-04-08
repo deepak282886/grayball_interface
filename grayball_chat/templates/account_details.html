@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Gray Ball{% endblock %}
+
+{% block additional_css %}
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container_ad">
+    <h2 class="text-4xl font-semibold mb-10">Change account details</h2>
+    
+    <!-- Display messages -->
+    <div class="messages">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    </div>
+
+   <!-- User details form -->
+    <form method="post" class="auth-form_ad">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    <button type="submit" name="edit_user" class="submit-btn_ad">Update Username</button>
+    </form>
+
+    <form method="post" class="auth-form_ad">
+    {% csrf_token %}
+    {{ password_form.as_p }}
+    <button type="submit" name="change_password" class="submit-btn_ad">Change Password</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block additional_js %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+
+

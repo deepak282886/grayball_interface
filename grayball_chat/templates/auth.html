@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up / Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+    <!-- Messages Section -->
+    <div class="logo">
+            <img src="{% static 'images/GrayBall_dark_icon.png' %}" alt="Gray Ball" />
+            <span class="logo-text">GrayBall</span>
+    </div>
+    <div class="auth-container">
+
+        <div class="toggle-buttons">
+            <button id="show-login" class="toggle-btn {% if form == 'login' %}active{% endif %}">Login</button>
+            <button id="show-signup" class="toggle-btn {% if form == 'signup' %}active{% endif %}">Sign Up</button>
+        </div>
+        <!-- Messages Section -->
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <!-- Login Form -->
+        <div id="login-form" class="auth-form" style="{% if form == 'signup' %}display: none;{% endif %}">
+            <form action="{% url 'auth' %}" method="post"> <!-- Update 'login_action' as needed -->
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit" name="login" class="submit-btn">Login</button>
+            </form>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signup-form" class="auth-form" style="{% if form == 'login' %}display: none;{% endif %}">
+            <form action="{% url 'auth' %}" method="post"> <!-- Update 'signup_action' as needed -->
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" id="signup-username" name="username" placeholder="Choose a Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signup-password" name="password" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+                </div>
+                <button type="submit" name="signup" class="submit-btn">Sign Up</button>
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="{% static 'js/auth.js' %}"></script>
+</body>
+</html>

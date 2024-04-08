@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Gray Ball{% endblock %}
+
+{% block additional_css %}
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
+<!-- Include custom styles for the history page -->
+<link href="{% static 'css/history.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <h2 class="history-title">Saved Searches</h2>
+    <div id="sessions-container" class="sessions-container">
+        {% for session in sessions|slice:":5" %}
+            <div class="session">
+                <div class="session-header" onclick="toggleSessionDetails(this)">
+                    <p>{{ session.searches.all.0.query }}</p> <!-- Displaying only the first query -->
+                </div>
+                <div class="session-details" style="display: none;">
+                    <ul>
+                        {% for search in session.searches.all %}
+                            <li>Query: {{ search.query }}, Response: {{ search.response }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+        {% if sessions|length > 5 %}
+            <button id="show-more-btn" class="show-more-btn">Show More</button>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block additional_js %}
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/history.js' %}"></script> <!-- Separate JavaScript file for history page logic -->
+{% endblock %}

@@ -1,0 +1,236 @@
+/* General Page Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom, #ffffff, #b0b0b0);
+  color: #333;
+  min-height: 100vh;
+  padding-top: 2rem;
+  margin: 0;
+  display: flex;
+}
+
+.container {
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Navbar Styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 100vh;
+  background-color: black;
+  color: #ffffff;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  flex-grow: 1;
+}
+
+.nav-links li {
+  margin-bottom: .75rem;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.1rem .3rem; /* Add padding to create the band effect */
+    display: block; /* Make the link take up the entire width of the list item */
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #FF5733; /* Color for the hover band */
+}
+
+.try-pro {
+  background-color: #FF5733;
+  color: #ffffff;
+  border: none;
+  margin-top: 1rem;
+  padding: 0.5rem 3rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.try-pro:hover {
+  background-color: #AA1C20;
+}
+
+/* Main Content Styles */
+.main-content {
+  margin-left: 200px;
+  width: calc(100% - 200px);
+}
+
+/* Search Box Styles */
+.search-box-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 30px auto;
+}
+
+.search-input {
+  font-size: 1.25rem;
+  padding: 1rem 4rem 1rem 1rem;
+  border: 2px solid transparent;
+  outline: none;
+  transition: all 0.3s;
+  box-shadow: #FF5733;
+  background: #fff;
+  width: 100%;
+  border-radius: 20px;
+  box-sizing: border-box;
+  overflow: auto;
+  resize: none;
+  min-height: 3rem;
+  max-height: 200px;
+}
+
+.search-input:focus {
+  border-color: #FF5733;
+  box-shadow: 0 0 0 2px #FF5733;
+}
+
+.search-button {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.75rem 1rem;
+  background-color: #FF5733;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+  height: 2rem;
+  line-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-button:hover {
+  background-color: #AA1C20;
+}
+
+.search-button i {
+  line-height: 1;
+}
+
+.bottom-search {
+  position: absolute;
+  bottom: 0;
+  right: 27.8%;
+  width: 100%;
+}
+
+.logo {
+    display: flex; /* Aligns image and text side by side */
+    align-items: center; /* Vertically centers the text with the image */
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.logo img {
+    max-width: 50px; /* Adjust as needed */
+    height: auto;
+    margin-right: 0.5rem; /* Adds a small space between the image and text */
+}
+
+.username-container {
+    position: fixed;
+    top: 20px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.username-btn {
+    padding: 0.5rem 1rem;
+    background-color: #FF5733; /* Example button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.username-btn:hover {
+    background-color: #AA1C20;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%; /* Directly below the button */
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px; /* Adjust as needed */
+    display: none; /* Initially hidden */
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    border-bottom: 1px solid #ddd;
+}
+
+.dropdown-item:hover {
+    background-color: #FF5733;
+}
+
+.dropdown-item i {
+    margin-right: 8px;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
+
+.auth-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.toggle-buttons {
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.auth-form {
+    /* Styles for forms */
+}
+
+

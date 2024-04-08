@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Grayball{% endblock %}
+
+{% block additional_css %}
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="container mx-auto text-center py-10">
+        <!-- Branding and Welcome Text -->
+        <h2 class="text-4xl font-semibold mb-10">Let's start researching!</h2>
+
+        <!-- Search Box -->
+        <div class="search-box-container relative inline-block">
+            <textarea id="search-input" class="search-input" placeholder="Ask anything..."></textarea>
+            <button id="search-button" class="search-button">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+        </div>
+        <!-- Loading Animation (Initially Hidden) -->
+
+        <!-- Chat Interface for displaying messages and responses -->
+        <div id="chat-interface">
+            <!-- Sample User Query -->
+            <!-- Future messages will be appended here by JavaScript -->
+        </div>
+        <div id="loading-animation" class="hidden">
+
+                <img src="{% static 'images/loading2.gif' %}" width="250" height="250" alt="Loading..." />
+
+        </div>
+        <div id="results" style="display: none;">
+
+        <!-- Results will be displayed here -->
+        </div>
+
+
+
+    </div>
+
+
+
+
+    </div>
+{% endblock %}
+
+{% block additional_js %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
