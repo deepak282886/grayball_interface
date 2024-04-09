@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSessionID = null;
     let lastSearchTime = 0; // Ensure this is properly defined in the scope accessible by handleSearch
     const debounceTime = 300; // milliseconds
+    let userQueries = [];
+    let messageCount = 0;
 
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
@@ -35,12 +37,21 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('click', closeDropdown);
 
     function handleSearch() {
+        if (messageCount >= 1) {
+        // Optionally alert the user or display a message that they cannot send more messages
+            document.getElementById('sessionLimitModal').style.display = 'block';
+            return; // Exit the function to prevent more searches
+        }
         const currentTime = new Date().getTime();
         if (currentTime - lastSearchTime <= debounceTime) return;
         lastSearchTime = currentTime;
 
         const userQuery = searchInput ? searchInput.value.trim() : '';
         if (!userQuery) return;
+
+        messageCount++;
+        if (searchInput) searchInput.disabled = true;
+        if (searchButton) searchButton.disabled = true;
 
         if (!currentSessionID) {
             startNewSearchSession(() => processSearch(userQuery));
@@ -49,11 +60,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     async function processSearch(userQuery) {
     appendMessageToChat(userQuery, true);
     resetSearchInput();
     moveSearchBoxToBottom();
     scrollToBottom();
+    userQuery2 = "User: " + userQuery
+    userQueries.push(userQuery2);
+    if (currentSessionID) {
+        saveSearchQuery(userQuery, currentSessionID);
+    }
 
     document.getElementById('loading-animation').classList.remove('hidden'); // Show loading
 
@@ -64,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ msg: userQuery }),
+            body: JSON.stringify({ msg: userQuery, allQueries: userQueries }),
         });
 
         if (!response.ok) {
@@ -73,12 +90,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = await response.json();
         const systemResponse = data["response"]; // Use the correct key for your data
+        const loadingAnimation = document.getElementById('loading-animation');
+        if (loadingAnimation) {
+            loadingAnimation.remove();
+        }
         appendMessageToChat(systemResponse, false);
+        systemResponse2 = "Assistant: " + systemResponse;
+        userQueries.push(systemResponse2);
+        if (currentSessionID) {
+            saveSearchQuery(userQuery, currentSessionID, systemResponse);
+        }
     } catch (error) {
         console.error("Error fetching search results:", error);
         appendMessageToChat("An error occurred. Please try again.", false);
     } finally {
         document.getElementById('loading-animation').classList.add('hidden'); // Hide loading
+        if (searchInput) searchInput.disabled = false;
+        if (searchButton) searchButton.disabled = false;
     }
     }
 
@@ -92,29 +120,46 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.status === 'success') {
                 currentSessionID = data.session_id;
+                messageCount = 0;
+                let userQueries = [];
                 if (callback) callback();
             }
         })
         .catch(error => console.error('Error starting new search session:', error));
     }
 
-    function saveSearchQuery(query, sessionID) {
-        fetch('/save_search/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken()
-            },
-            body: JSON.stringify({ query: query, session_id: sessionID })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                console.log('Search saved:', data);
-            }
-        })
-        .catch(error => console.error('Error saving search:', error));
+    function saveSearchQuery(query, sessionID, response = null) {
+    const dataToSend = JSON.stringify({
+        query: query,
+        session_id: sessionID,
+        response: response, // This will be null for the initial save and populated for the update
+    });
+
+    fetch('/save_search/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+        },
+        body: dataToSend,
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Search saved:', data);
+        } else {
+            console.error('Failed to save search:', data.message);
+        }
+    })
+    .catch(error => console.error('Error saving search:', error));
     }
+
+
 
     function appendMessageToChat(message, isUser) {
         const messageDiv = document.createElement('div');
@@ -125,6 +170,13 @@ document.addEventListener('DOMContentLoaded', function() {
             messageDiv.classList.add('user-message');
         } else {
             messageDiv.classList.add('system-response');
+        }
+
+        if (isUser) {
+        const loadingAnimation = document.createElement('div');
+        loadingAnimation.id = 'loading-animation'; // Make sure this ID is unique if you're calling it multiple times
+        loadingAnimation.innerHTML = document.getElementById('loading-animation').innerHTML; // Assuming 'loading' is your predefined animation
+        chatInterface.appendChild(loadingAnimation);
         }
 
         chatInterface.appendChild(messageDiv);

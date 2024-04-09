@@ -158,32 +158,43 @@ def start_new_search_session(request):
     return JsonResponse({'status': 'error'}, status=400)
 
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from .models import SearchSession, UserSearch
+import json
+
+
 @login_required
 @require_POST
 def save_search(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'status': 'error', 'message': 'User not authenticated'}, status=401)
-
     try:
         data = json.loads(request.body)
         query = data.get('query')
         session_id = data.get('session_id')
+        response = data.get('response', None)  # New line to accept response
 
         if not query:
             return JsonResponse({'status': 'error', 'message': 'No query provided'}, status=400)
         if not session_id:
             return JsonResponse({'status': 'error', 'message': 'Session ID is required'}, status=400)
 
+        # Ensure the session exists and belongs to the current user
         try:
-            # Ensure the session exists and belongs to the current user
             session = SearchSession.objects.get(id=session_id, user=request.user)
         except ObjectDoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=404)
 
-        # Save the user search associated with the found session
-        UserSearch.objects.create(session=session, query=query)
+        # Check if the user search exists to decide if we should update it
+        user_search, created = UserSearch.objects.get_or_create(session=session, query=query,
+                                                                defaults={'response': response})
 
-        return JsonResponse({'status': 'success', 'session_id': str(session.id)})
+        # If the object was fetched and not created, we update the response if it's provided
+        if not created and response is not None:
+            user_search.response = response
+            user_search.save()
+
+        return JsonResponse({'status': 'success', 'session_id': str(session.id), 'created': created})
 
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)

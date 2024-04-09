@@ -10,13 +10,22 @@
 
 {% block content %}
     <!-- Main Content -->
+    <div id="sessionLimitModal" class="modal-attr">
+            <div class="modal-card">
+                <p class="modal-text">You have reached the limit of 5 messages per session.</p>
+                <a href="{% url 'start_new_search_session' %}" class="modal-btn">Start New Session</a>
+            </div>
+    </div>
     <div class="container mx-auto text-center py-10">
         <!-- Branding and Welcome Text -->
-        <h2 class="text-4xl font-semibold mb-10">Let's start researching!</h2>
+        <h2 class="text-4xl font-semibold mb-10">Let's cricket!</h2>
+        <p class="mb-6" style="color: #6c757d;">Please note: This tool is currently in its Beta phase. We're excited to have you on board as we refine its capabilities. During this period, it's possible you might encounter some inaccuracies as we work to perfect the experience.</p>
+
+
 
         <!-- Search Box -->
         <div class="search-box-container relative inline-block">
-            <textarea id="search-input" class="search-input" placeholder="Ask anything..."></textarea>
+            <textarea id="search-input" class="search-input" placeholder="Ask anything about cricket..."></textarea>
             <button id="search-button" class="search-button">
                 <i class="fa fa-paper-plane" aria-hidden="true"></i>
             </button>
