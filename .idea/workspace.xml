@@ -7,14 +7,9 @@
     <list default="true" id="7ec2b699-29bb-4ea0-9354-2f85a24570d1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grayball_chat/static/images/loading2.gif" beforeDir="false" afterPath="$PROJECT_DIR$/grayball_chat/static/images/loading2.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grayball_chat/static/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/grayball_chat/static/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grayball_chat/templates/auth.html" beforeDir="false" afterPath="$PROJECT_DIR$/grayball_chat/templates/auth.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grayball_chat/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/grayball_chat/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grayball_chat/static/js/history.js" beforeDir="false" afterPath="$PROJECT_DIR$/grayball_chat/static/js/history.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grayball_chat/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/grayball_chat/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grayball_chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/grayball_chat/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grayball_chat_project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/grayball_chat_project/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

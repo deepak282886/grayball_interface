@@ -4,34 +4,40 @@ document.getElementById('show-more-btn').addEventListener('click', function() {
     currentPage++; // Increment to load the next page
 
     fetch(`/get_more_sessions/?page=${currentPage}`, { method: 'GET' })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Received data:', data);
+
             if (data.status === 'success') {
                 const sessionsContainer = document.getElementById('sessions-container');
                 const showMoreBtn = document.getElementById('show-more-btn');
 
                 data.sessions.forEach(session => {
-                    // Skip sessions with no searches
                     if (!session.searches || session.searches.length === 0) {
                         return;
                     }
 
-                    // Create the session div
-                    const sessionDiv = createSessionDiv(session);
-                    // Insert the session div before the Show More button
+                    const sessionDiv = createSessionDiv(session); // Ensure this function is defined and logs its activity
                     sessionsContainer.insertBefore(sessionDiv, showMoreBtn);
                 });
 
-                // If there are no more pages, hide the "Show More" button
                 if (!data.has_next) {
                     showMoreBtn.style.display = 'none';
                 }
+            } else {
+                console.error('Error from server:', data.message); // Log server-side errors
             }
         })
         .catch(error => {
-            console.error('Error loading more sessions:', error);
+            console.error('Error loading more sessions:', error); // Log errors that occur during fetch
         });
 });
+
 
 function createSessionDiv(session) {
     const sessionDiv = document.createElement('div');

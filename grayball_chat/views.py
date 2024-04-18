@@ -26,34 +26,32 @@ from .models import SearchSession, UserSearch
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 import sys
+from django.http import JsonResponse
+from django.core.paginator import Paginator
+from django.db.models import Prefetch
 sys.path.append("/home/deepak/Documents/grayball_final/")
 from final_output import get_query_answer
 
 @login_required
 def get_more_sessions(request):
     try:
-        # Retrieve the page number from the request; default to 1 if not provided
-        page_number = request.GET.get('page', 1)
-        page_size = 5  # Number of sessions to return per page
+        page_number = request.GET.get('page', '1')
+        try:
+            page_number = int(page_number)
+        except ValueError:
+            page_number = 1  # default to the first page on error
 
-        # Get the search sessions for the current user
-        sessions = SearchSession.objects.filter(user=request.user).order_by('-created_at')
+        page_size = 5
+        sessions = SearchSession.objects.filter(user=request.user).order_by('-created_at').prefetch_related('searches')
 
-        # Create a Paginator object and get the requested page
         paginator = Paginator(sessions, page_size)
         requested_page = paginator.get_page(page_number)
 
-        # Serialize the session data (you can modify this part to suit your data structure)
-        session_data = []
-        for session in requested_page:
-            searches = list(
-                session.searches.all().values('query', 'response'))  # Or however you want to serialize the searches
-            session_info = {
-                'id': str(session.id),
-                'created_at': session.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-                'searches': searches,  # Include the searches in the session data
-            }
-            session_data.append(session_info)
+        session_data = [{
+            'id': str(session.id),
+            'created_at': session.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'searches': list(session.searches.all().values('query', 'response')),
+        } for session in requested_page]
 
         return JsonResponse({
             'status': 'success',
@@ -63,8 +61,7 @@ def get_more_sessions(request):
         })
 
     except Exception as e:
-        # Handle any unexpected errors
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        return JsonResponse({'status': 'error', 'message': "An unexpected error occurred."}, status=500)
 
 @login_required
 def start_new_search_session_pro(request):
