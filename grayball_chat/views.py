@@ -17,7 +17,6 @@ from django.contrib.auth.password_validation import validate_password
 import re
 from django.contrib.auth import update_session_auth_hash
 from .forms import EditUserForm, CustomPasswordChangeForm
-
 from django.contrib.auth.decorators import login_required
 from .models import SearchSession
 from django.http import JsonResponse
@@ -25,6 +24,10 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from .models import SearchSession, UserSearch
 from django.core.paginator import Paginator
+from django.views.decorators.http import require_http_methods
+import sys
+sys.path.append("/home/deepak/Documents/grayball_final/")
+from final_output import get_query_answer
 
 @login_required
 def get_more_sessions(request):
@@ -202,6 +205,25 @@ def save_search(request):
         # Log the exception here if you have logging set up
         return JsonResponse({'status': 'error', 'message': 'Internal server error: {}'.format(str(e))}, status=500)
 
+@csrf_exempt
+@require_http_methods(["POST"])
+def handle_chat_request(request):
+    # Parse the JSON body of the POST request
+    data = json.loads(request.body.decode('utf-8'))
+    userText = data.get('msg')
+    alltext = data.get('allQueries')
+
+    final_answer, link_list, context = get_query_answer(userText, alltext)
+
+    if isinstance(final_answer, list):
+        full_text = ""
+        for uu in final_answer:
+            full_text += uu
+
+    else:
+        full_text += final_answer
+    # Return the model's response as JSON
+    return JsonResponse({"response": full_text})
 
 def logout_view(request):
     storage = get_messages(request)

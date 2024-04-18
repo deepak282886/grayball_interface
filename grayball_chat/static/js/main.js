@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('click', closeDropdown);
 
     function handleSearch() {
-        if (messageCount >= 1) {
+        if (messageCount >= 4) {
         // Optionally alert the user or display a message that they cannot send more messages
             document.getElementById('sessionLimitModal').style.display = 'block';
             return; // Exit the function to prevent more searches
@@ -75,9 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('loading-animation').classList.remove('hidden'); // Show loading
 
     try {
-        const response = await fetch('http://localhost:5000/chat', {
+        const response = await fetch('/chat/', {  // Updated to use relative URL
             method: 'POST',
-            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -11,4 +11,5 @@ urlpatterns = [
     path('save_search/', views.save_search, name='save_search'),
     path('start_new_search_session/', views.start_new_search_session, name='start_new_search_session'),
     path('start_new_search_session_pro/', views.start_new_search_session_pro, name='start_new_search_session_pro'),
-    path('history/', views.history, name='history')]
+    path('history/', views.history, name='history'),
+    path('chat/', views.handle_chat_request, name='chat_handler'),]
